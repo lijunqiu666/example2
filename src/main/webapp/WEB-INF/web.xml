@@ -1,0 +1,102 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+    <!-- web-app 标签爆红可以忽略 -->
+    <display-name>Archetype Created Web Application</display-name>
+
+    <!-- 1. 启动Spring -->
+    <!-- 1.1 加载全局参数 -->
+    <context-param>
+        <!-- 1.1.1 加载Spring的配置文件 -->
+        <!-- 表示 Spring配置文件的路径 -->
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring.xml</param-value>
+    </context-param>
+    <!-- 1.2 加载监听器 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <!-- 2. 启动SpringMVC 其实就是配置DispatcherServlet  这个servlet可以拦截所有的请求 -->
+    <servlet>
+        <!-- 2.1 引入dispatcherServlet-->
+        <servlet-name>dispatcherServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- 2.2 加载SpringMVC的配置文件 -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:springmvc.xml</param-value>
+        </init-param>
+    </servlet>
+
+
+    <!-- 2.3 配置servlet的映射 -->
+    <servlet-mapping>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <!-- 拦截所有的请求 -->
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <!-- 3. 字符编码过滤器 -->
+    <filter>
+        <filter-name>characterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <!-- GB2312 ==> GBK 国标扩展码  ==> UTF-8 -->
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <!-- 配置过滤器的映射 -->
+    <filter-mapping>
+        <filter-name>characterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- 4. 配置静态资源 -->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.png</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.woff</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.woff2</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.ttf</url-pattern>
+    </servlet-mapping>
+
+<!--    过滤器-->
+    <filter>
+        <filter-name>loginFilter</filter-name>
+        <filter-class>whut.filter.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>loginFilter</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
+
+</web-app>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+">
+    <!-- 配置Mybatis和Spring的整合   实质就是将mybatis的核心类  sqlSession交给Spring来管理  -->
+    <!--
+        Spring 两大核心机制
+            IOC Inversion of Control  控制反转  将对象的创建反转到Spring上    IOC理解做容器  里面存放Spring创建的对象  在程序需要的时候分发出来
+            AOP
+
+     -->
+
+    <!-- 1. 配置数据源 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!-- 1.1 指定数据库连接相关属性 -->
+        <property name="jdbcUrl" value="jdbc:mysql:///abc?serverTimezone=Asia/Shanghai"/>
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="user" value="root"/>
+        <property name="password" value="password" />
+        <!-- 1.2 指定连接池的相关属性 -->
+        <!-- 连接池的初始化数量 -->
+        <property name="initialPoolSize" value="5"/>
+        <!-- 连接池的最大数量-->
+        <property name="maxPoolSize" value="10"/>
+    </bean>
+
+    <!-- 2.配置sqlSession -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 2.1 引入数据源 -->
+        <!-- 注意 如果值是基本数据类型(int,byte,short,long,double,float,char,boolean) + String 就用value  如果引用数据类型  用ref -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 2.2 加载映射文件 -->
+        <property name="mapperLocations" value="classpath:whut/dao/*.xml"/>
+        <!-- 2.3 加载mybatis的配置文件 -->
+        <property name="configLocation" value="classpath:config.xml"/>
+    </bean>
+    <!-- 3. 将mybatis产生的代理 交给Spring管理    ==== 将接口的实现类 放到IOC容器中  -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="whut.dao"/>
+    </bean>
+
+</beans>

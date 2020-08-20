@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="whut.dao.RoleDao">
+    <select id="findRoleIdByUsername" resultType="int" parameterType="java.lang.String">
+        select roleid
+        from userrole
+        where userid = (select id from user where name = #{username})
+    </select>
+
+    <select id="findRoleByUsername" parameterType="java.lang.String" resultType="whut.bean.Role">
+        SELECT *
+        FROM role
+        WHERE id NOT IN (SELECT roleid FROM userrole WHERE userid = (SELECT id FROM user WHERE name = #{username}))
+    </select>
+
+    <select id="getUserId" resultType="int" parameterType="java.lang.String">
+        select id
+        from user
+        where name = #{username}
+    </select>
+
+    <insert id="addRole" parameterType="whut.bean.UserRole">
+        insert into userrole(userid, roleid)
+        values (#{userid}, #{roleid})
+    </insert>
+</mapper>
